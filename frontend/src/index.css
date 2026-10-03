@@ -1,0 +1,109 @@
+/* ============================================================
+   Design tokens
+   Subject: an instrument panel for watching a model's health as
+   its input data drifts - not a generic SaaS analytics dashboard.
+   Palette reads as calibrated measurement equipment: quiet paper
+   background, ink for text, amber for caution, umber-red for
+   critical, teal for "holding steady".
+   ============================================================ */
+:root {
+  --bg: #EFF1EA;
+  --panel: #FBFBF8;
+  --panel-raised: #FFFFFF;
+  --ink: #172227;
+  --ink-soft: #55625F;
+  --ink-faint: #8B948E;
+  --line: #D8DAD0;
+  --line-strong: #B7BBAE;
+
+  --accent-teal: #2F6E68;
+  --accent-teal-soft: #DCEAE7;
+  --accent-amber: #B8842E;
+  --accent-amber-soft: #F3E7D2;
+  --accent-red: #A8402F;
+  --accent-red-soft: #F1DCD6;
+
+  --font-display: "Fraunces", "Iowan Old Style", serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+
+  --radius-sm: 3px;
+  --radius-md: 5px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12181A;
+    --panel: #182022;
+    --panel-raised: #1D2628;
+    --ink: #EAEFEC;
+    --ink-soft: #A9B4B0;
+    --ink-faint: #6D7976;
+    --line: #2C3638;
+    --line-strong: #3E4A4C;
+    --accent-teal: #59A99E;
+    --accent-teal-soft: #1E3230;
+    --accent-amber: #D9A44E;
+    --accent-amber-soft: #3A2F1A;
+    --accent-red: #D97D6C;
+    --accent-red-soft: #3B211C;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+}
+
+html {
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+code, .mono, .num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+button {
+  font-family: var(--font-body);
+}
+
+a { color: var(--accent-teal); }
+
+::selection { background: var(--accent-amber-soft); }
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent-teal);
+  outline-offset: 2px;
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 6px; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
