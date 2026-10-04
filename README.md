@@ -91,25 +91,37 @@ if you're running the backend elsewhere.
 
 ## Using it
 
-1. **Drift tab** — generate a synthetic reference/current dataset pair (or
-   upload your own CSVs via `POST /api/datasets/upload`), pick a drift
-   magnitude and mechanism, and run the analysis. You'll see per-feature PSI,
-   KS test results, Jensen-Shannon divergence, and a multivariate classifier
-   two-sample-test AUC, plus an overall drift score and severity.
+1. **Drift tab** — choose how to provide your data using the toggle:
+   - **Synthetic generator**: Generate a simulated baseline/production pair with configurable magnitude, drift mechanism (covariate, concept, mixed), row counts, and seed[cite: 1].
+   - **Upload custom CSVs**: Upload your own two CSV files directly in the UI — one for your **Reference** (baseline/training) data and one for your **Current** (production) data, with an optional target column name.
+   Once generated or uploaded, running the analysis displays per-feature PSI, KS test results, Jensen-Shannon divergence, and a multivariate classifier two-sample test (C2ST) AUC, along with an overall drift score and severity badge.
+
 2. **Impact tab** — reads that drift signature and predicts the expected drop
    in accuracy / F1 / ROC AUC, with a confidence interval and feature
    importances, plus the impact model's own validation metrics (R², MAE,
    broken out by drift type — see "Honest limitations" below).
+
 3. **Schedule tab** — enter an observed drift history (or use the defaults),
    retraining cost, and a per-day cost of running a degraded model, and get a
    minimal-cost recommended retraining cadence versus a fixed-periodic
    baseline and a do-nothing baseline.
+
 4. **Longitudinal tab** — the validation experiment: deploys a real
    RandomForest over many simulated weeks of drifting data, retrains it
    according to a chosen strategy, and plots the impact model's *predicted*
    degradation against the model's *true*, measured degradation each week —
    something only possible to check honestly in a simulation with ground
    truth, which is exactly why this exists.
+
+
+### Custom CSV Upload Requirements
+
+When uploading your own 2 files in the Drift tab:
+- **Two separate files**: Provide one CSV as your baseline (Reference) and one CSV as your production batch (Current).
+- **Matching headers**: Both files must share identical feature column names.
+- **Numeric columns**: Drift statistics are calculated over numeric features.
+- **Target column**: Optional; if your files contain a label/target, specify its column name so it is excluded from input feature drift calculations.
+
 
 ## Honest limitations (read this before trusting the numbers)
 
@@ -224,3 +236,4 @@ were found by writing tests and re-reading the code, not reported by a user:
   entirely NaN on one side (e.g. a field a new data source hasn't populated
   yet) would call `.min()`/`.max()` on an empty array and crash. Now returns
   a "no signal" result instead.
+- **Custom CSV upload via UI.** Added direct frontend support in the Drift tab for uploading custom reference and current CSV datasets via a segmented toggle, with client-side schema alignment validation, hooking into `/api/datasets/upload` and `/api/drift/analyze`.
